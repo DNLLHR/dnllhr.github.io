@@ -13,7 +13,7 @@
   }
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 80px; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 124px; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font: 17px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
