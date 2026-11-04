@@ -17,7 +17,10 @@
     return l;
   }
   function apply(l) { root.setAttribute("data-lang", l); root.setAttribute("lang", l); }
-  if (root.hasAttribute("data-fixed")) return;
+  // Feste Seiten (privacy.html, imprint.html) merken sich ihre Sprache, damit „Start“ englisch bleibt.
+  if (root.hasAttribute("data-fixed")) { remember(root.getAttribute("data-lang")); return; }
+  var explicit = fromHash() || fromQuery();
+  if (explicit) remember(explicit);
   apply(pick());
   window.addEventListener("hashchange", function () { var l = fromHash(); if (l) { apply(l); remember(l); } });
   document.addEventListener("click", function (ev) {
