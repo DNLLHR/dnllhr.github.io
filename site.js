@@ -10,12 +10,14 @@
     var m = h.match(/-(de|en)$/);
     return m ? m[1] : null;
   }
+  function fromQuery() { var m = location.search.match(/[?&]lang=(de|en)/); return m ? m[1] : null; }
   function pick() {
-    var l = fromHash() || stored();
+    var l = fromHash() || fromQuery() || stored();
     if (l !== "de" && l !== "en") l = (navigator.language || "de").toLowerCase().indexOf("de") === 0 ? "de" : "en";
     return l;
   }
   function apply(l) { root.setAttribute("data-lang", l); root.setAttribute("lang", l); }
+  if (root.hasAttribute("data-fixed")) return;
   apply(pick());
   window.addEventListener("hashchange", function () { var l = fromHash(); if (l) { apply(l); remember(l); } });
   document.addEventListener("click", function (ev) {

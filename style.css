@@ -39,7 +39,7 @@ html:not([data-lang]) button.lang { display: none; }
 nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 nav a { color: var(--muted); text-decoration: none; padding: 6px 10px; border-radius: 8px; font-size: 15px; }
 nav a:hover { color: var(--ink); background: var(--line); }
-button.lang { font: inherit; font-size: 14px; color: var(--ink); background: transparent; border: 1px solid var(--line);
+.lang { text-decoration: none; display: inline-block; font: inherit; font-size: 14px; color: var(--ink); background: transparent; border: 1px solid var(--line);
   border-radius: 999px; padding: 4px 12px; margin-left: 6px; cursor: pointer; }
 
 .hero { padding-top: 64px; padding-bottom: 8px; }
