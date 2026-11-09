@@ -1,33 +1,28 @@
 // Copyright © 2026 Daniel Lehr. Alle Rechte vorbehalten.
-// Sprache wählen: #de/#en in der Adresse, sonst gespeicherte Wahl, sonst Gerätesprache.
 (function () {
   var root = document.documentElement;
+  var lang = root.getAttribute("lang");
+  var alt = root.getAttribute("data-alt");
+
   function stored() { try { return localStorage.getItem("lang"); } catch (e) { return null; } }
   function remember(l) { try { localStorage.setItem("lang", l); } catch (e) {} }
-  function fromHash() {
+
+  // #de/#en und ?lang= stammen aus Links, die die Apps und App Store Connect schon verwenden.
+  function requested() {
     var h = location.hash.slice(1);
     if (h === "de" || h === "en") return h;
-    var m = h.match(/-(de|en)$/);
+    var m = location.search.match(/[?&]lang=(de|en)/);
     return m ? m[1] : null;
   }
-  function fromQuery() { var m = location.search.match(/[?&]lang=(de|en)/); return m ? m[1] : null; }
-  function pick() {
-    var l = fromHash() || fromQuery() || stored();
-    if (l !== "de" && l !== "en") l = (navigator.language || "de").toLowerCase().indexOf("de") === 0 ? "de" : "en";
-    return l;
-  }
-  function apply(l) { root.setAttribute("data-lang", l); root.setAttribute("lang", l); }
-  // Feste Seiten (privacy.html, imprint.html) merken sich ihre Sprache, damit „Start“ englisch bleibt.
-  if (root.hasAttribute("data-fixed")) { remember(root.getAttribute("data-lang")); return; }
-  var explicit = fromHash() || fromQuery();
-  if (explicit) remember(explicit);
-  apply(pick());
-  window.addEventListener("hashchange", function () { var l = fromHash(); if (l) { apply(l); remember(l); } });
+  function device() { return (navigator.language || "de").toLowerCase().indexOf("de") === 0 ? "de" : "en"; }
+
+  var wanted = requested();
+  if (wanted) remember(wanted);
+  else if (root.hasAttribute("data-auto")) wanted = stored() || device();
+  if (wanted && wanted !== lang && alt) location.replace(alt);
+
   document.addEventListener("click", function (ev) {
-    var b = ev.target.closest && ev.target.closest("button.lang");
-    if (!b) return;
-    var l = b.getAttribute("data-to");
-    apply(l); remember(l);
-    if (fromHash()) history.replaceState(null, "", "#" + l);
+    var link = ev.target.closest && ev.target.closest("a.lang");
+    if (link) remember(link.getAttribute("data-lang"));
   });
 })();

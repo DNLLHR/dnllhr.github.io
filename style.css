@@ -26,9 +26,6 @@ a { color: var(--link); }
 .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
 .muted { color: var(--muted); }
 
-/* Sprache: ohne JS beide sichtbar, mit JS nur die gewählte */
-html[data-lang="de"] .l-en, html[data-lang="en"] .l-de { display: none !important; }
-html:not([data-lang]) button.lang { display: none; }
 
 .top { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: saturate(1.4) blur(12px); -webkit-backdrop-filter: saturate(1.4) blur(12px); border-bottom: 1px solid var(--line); }
@@ -56,13 +53,17 @@ nav a:hover { color: var(--ink); background: var(--line); }
   position: relative; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease; }
 .card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--app); }
 .card:hover { transform: translateY(-2px); }
-.card img { width: 88px; height: 88px; border-radius: 22.5%; flex: none; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+.appicon { display: block; flex: none; width: 88px; aspect-ratio: 1 / 1; border-radius: 22%; overflow: hidden;
+  background: color-mix(in srgb, var(--app) 30%, var(--line)); box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+.appicon img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.appicon.big { width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
 .card p { margin: 0 0 8px; color: var(--muted); font-size: 15px; line-height: 1.4; }
 .pill { display: inline-block; font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
   background: color-mix(in srgb, var(--app, var(--accent)) 22%, transparent); color: var(--ink); }
 
 .support { margin-bottom: 24px; }
-.button { display: inline-block; text-decoration: none; font-weight: 600; padding: 11px 20px; border-radius: 12px;
+.button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; text-decoration: none;
+  font-weight: 600; padding: 10px 20px; border-radius: 12px;
   background: var(--brand); color: var(--brand-ink); margin: 4px 8px 4px 0; }
 .button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
 
@@ -70,7 +71,6 @@ nav a:hover { color: var(--ink); background: var(--line); }
 .apphero { background: radial-gradient(120% 140% at 20% 0%, color-mix(in srgb, var(--app-deep) 70%, #fff 10%), var(--app-deep));
   color: #fff; padding: 48px 0 40px; }
 .apphero .wrap { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
-.apphero img { width: 140px; height: 140px; border-radius: 22.5%; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
 .apphero h1 { margin: 0 0 .15em; }
 .apphero .lead { color: rgba(255,255,255,.85); margin: 0 0 12px; }
 .apphero .pill { background: var(--app); color: #1c1d24; }
@@ -80,6 +80,13 @@ nav a:hover { color: var(--ink); background: var(--line); }
 .facts { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 4px 20px 12px; }
 .facts h2 { font-size: 1.05rem; margin: 1em 0 .4em; }
 .facts ul { margin: 0; padding-left: 1.1em; }
+.shots { display: grid; grid-template-columns: repeat(3, minmax(0, 220px)); gap: 16px; }
+.shot { margin: 0; aspect-ratio: 1179 / 2556; border-radius: 28px; overflow: hidden; border: 1px solid var(--line);
+  background: var(--surface); box-shadow: var(--shadow); }
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.shot.skeleton { background: linear-gradient(110deg, var(--surface) 30%, color-mix(in srgb, var(--app) 18%, var(--surface)) 50%, var(--surface) 70%);
+  background-size: 250% 100%; animation: shimmer 2.4s ease-in-out infinite; }
+@keyframes shimmer { from { background-position: 100% 0; } to { background-position: -150% 0; } }
 .faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; margin: 8px 0; }
 .faq summary { cursor: pointer; font-weight: 600; }
 .faq details p { margin: .6em 0 .2em; color: var(--muted); }
@@ -91,10 +98,14 @@ nav a:hover { color: var(--ink); background: var(--line); }
 .foot { border-top: 1px solid var(--line); margin-top: 56px; padding: 24px 0 40px; font-size: 14px; }
 .foot p { margin: 0; }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
+  .wrap { padding: 0 16px; }
   .twocol { grid-template-columns: 1fr; }
+  .shots { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .shot { border-radius: 16px; }
+  .actions .button { width: 100%; margin-right: 0; }
   .hero { padding-top: 40px; }
-  .apphero img { width: 104px; height: 104px; }
+  .appicon.big { width: 104px; }
   nav a { padding: 6px 7px; font-size: 14px; }
 }
-@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } .shot.skeleton { animation: none; } }
